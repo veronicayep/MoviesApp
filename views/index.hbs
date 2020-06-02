@@ -1,2 +1,12 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<h1 class="mb-4">{{title}}</h1>
+
+{{!-- <form action="post"> --}}
+    {{!-- <button class="btn btn-dark mb-4" id="get-ratings">Get ratings</button> --}}
+    <input id="movie-ids" name="movie-ids" type="hidden" value="{{movieIds}}">
+{{!-- </form> --}}
+
+<div class="row">
+{{#each movies}}
+    {{> movie}}
+{{/each}}
+</div>
