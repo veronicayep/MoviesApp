@@ -5,6 +5,21 @@
     <input id="movie-ids" name="movie-ids" type="hidden" value="{{movieIds}}">
 {{!-- </form> --}}
 
+<div class="mb-4">
+    <select class="custom-select" id="genre" name="genre">
+        <option selected="selected" disabled="disabled">Select Genre</option>
+        <option value="all">All</option>
+        {{#each genres}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+    </select>
+</div>
+
+<div class="list-group mb-4" id="found-movies">
+    <input class="list-group-item" id="search" name="search" type="search"
+        placeholder="Search" aria-label="Search movies">
+</div>
+
 <div class="row">
 {{#each movies}}
     {{> movie}}

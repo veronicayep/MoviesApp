@@ -4,6 +4,8 @@ const Movies = require('../controllers/Movies');
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
+    let genres = Movies.getGenres;
+    // console.log(genres);
     Movies.getMovies().then(movies => {
         let movieIds = [];
         movies.forEach(element => {
@@ -13,6 +15,7 @@ router.get('/', (req, res, next) => {
             title: 'Movies',
             movies,
             movieIds,
+            genres,
         });
     }).catch(err => {
         console.log(err);
