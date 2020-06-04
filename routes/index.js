@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Movies = require('../controllers/Movies');
+const { requireAuth } = require('../controllers/Auth');
+
+
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
-    let genres = Movies.getGenres;
+
+router.get('/', requireAuth,(req, res, next) => {
+	 let genres = Movies.getGenres;
     // console.log(genres);
     Movies.getMovies().then(movies => {
         let movieIds = [];
@@ -16,6 +20,7 @@ router.get('/', (req, res, next) => {
             movies,
             movieIds,
             genres,
+			loggedIn: req.loggedIn
         });
     }).catch(err => {
         console.log(err);
