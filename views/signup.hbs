@@ -1,33 +1,47 @@
-<div class="offset-4 col-4 my-5">
-    <form action="/users/signup" method="POST">
-     <div class="form-group">
-                <label for="firstNameInput">First Name</label>
-                <input name="firstName" type="text" class="form-control" id="firstNameInput" required="true">
-            </div>
+<div class="col offset-md-3 col-md-6 my-5">
+    <form action="/users/signup" method="post">
+        <div class="form-group">
+            <label for="firstNameInput">First name</label>
+            <input name="firstName" type="text" class="form-control" id="firstNameInput" required="true"
+                {{#if firstName}} value="{{firstName}}" {{/if}}>
+        </div>
 
-            <div class="form-group">
-                <label for="surnameInput">Surname</label>
-                <input name="surname" type="text" class="form-control" id="surnameInput" required="true">
-            </div>
+        <div class="form-group">
+            <label for="surnameInput">Surname</label>
+            <input name="surname" type="text" class="form-control" id="surnameInput" required="true" {{#if surname}}
+                value="{{surname}}" {{/if}}>
+        </div>
 
-            <div class="form-group">
-                <label for="emailInput">Email address</label>
-                <input name="email" type="email" class="form-control" id="emailInput" placeholder="Enter email" required="true">
-            </div>
+        <div class="form-group">
+            <label for="emailInput">Email address</label>
+            <input name="email" type="email" class="form-control" id="emailInput" required="true" {{#if email}}
+                value="{{email}}" {{/if}}>
+        </div>
 
-            <div class="form-group">
-                <label for="passwordInput">Password</label>
-                <input name="password" type="password" class="form-control" id="passwordInput" placeholder="Password" required="true">
-            </div>
+        <div class="form-group">
+            <label for="passwordInput">Password</label>
+            <input name="password" type="password" class="form-control" id="passwordInput" required="true"
+                {{#if password}} value="{{password}}" {{/if}}>
+        </div>
 
-            <div class="form-group">
-                <label for="confirmPasswordInput">Confirm Password</label>
-                <input name="confirmPassword" type="password" class="form-control" id="confirmPasswordInput"
-                    placeholder="Re-enter your password here" required="true">
-            </div>
+        <div class="form-group mb-4">
+            <label for="confirmPasswordInput">Confirm Password</label>
+            <input name="confirmPassword" type="password" class="form-control" id="confirmPasswordInput" required="true"
+                {{#if confirmPassword}} value="{{confirmPassword}}" {{/if}}>
+        </div>
 
-            <button type="submit" class="btn btn-primary">Sign up</button>
+        {{#if errorMessage}}
+        <div class="my-4 text-center">
+            <p class="text-danger">{{errorMessage}}</p>
+        </div>
+        {{/if}}
 
+        <div class="my-3 text-center">
+            <button type="submit" class="btn btn-dark">Sign up</button>
+        </div>
     </form>
-    <a class="mt-3" href="/users/login">Already have an account? Sign in</a>
+
+    <div class="my-3 text-center">
+        <a class="text-dark" href="/users/login">Already have an account? Login</a>
+    </div>
 </div>
