@@ -30,6 +30,8 @@ router.get('/:id', requireAuth, (req, res) => {
                 year: movieDetails.year,
                 synopsis: movieDetails.description_full,
                 loggedIn: req.loggedIn,
+                ratingOptions: [1, 2, 3, 4, 5],
+                canRate: true,
             });
             // res.json(movieDetails);
         })

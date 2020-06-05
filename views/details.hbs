@@ -5,6 +5,28 @@
         <div class="px-2 px-sm-0">
             <img class="align-self-center mw-100 shadow" src="{{poster}}" alt="{{title}} poster">
         </div>
+        {{#if loggedIn}}
+        <div class="my-4">
+            {{#if canRate}}
+            <form action="/movies/details/{{id}}" method="post">
+                <div class="form-group">
+                    <select class="custom-select" id="user-rating" name="user-rating">
+                        <option selected="selected" disabled="disabled">Pick a rating</option>
+                        {{#each ratingOptions}}
+                            <option value="{{this}}">{{this}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <input id="movie-ids" name="movie-ids" type="hidden" value="{{id}}">
+                
+                <button class="btn btn-dark btn-block mb-4" id="get-ratings">Rate movie</button>
+            </form>
+            {{else}}
+            <p class="text-center">You have already rated this movie.</p>
+            {{/if}}
+        </div>
+        {{/if}}
     </div>
 
     <div class="col px-5 p-sm-3 my-4 my-sm-0 py-4 py-md-3">
@@ -12,7 +34,6 @@
         <p>{{year}}</p>
         <h5>Synopsis:</h5>
         <p>{{synopsis}}</p>
-        <input id="movie-ids" name="movie-ids" type="hidden" value="{{id}}">
         {{> rating}}
     </div>
 </div>
