@@ -7,7 +7,7 @@ module.exports = {
             jwt.sign(
                 { userId },
                 'secretAccessKey',
-                { expiresIn: '10m' },
+                // { expiresIn: '10m' },
                 (err, token) => {
                     if (err) reject(err);
                     resolve(token);
