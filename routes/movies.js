@@ -40,4 +40,46 @@ router.get('/:id', requireAuth, (req, res) => {
         });
 });
 
+router.post('/details/:movieId', requireAuth, async (req, res) => {
+
+
+    const { movieId } = req.params;
+    const userId = req.user;
+    const rating = req.body['user-rating'];
+
+    console.log('(details)Movie id :', movieId)
+    console.log('(details)User id : ', userId);
+
+
+    // Verify user loggin
+    if(userId === undefined){
+        console.log(' User id is undefined, please log in to rate')
+
+    }else{
+        // Check if user have rated the movie
+        const canRate = await Model.canRate(movieId, userId);
+        console.log(canRate);
+
+        if(canRate){
+            // User haven't rate the movie
+            console.log('You can rate this movie');
+            await Model.addNewRating(movieId, userId, rating);
+            res.redirect('/movies/' + movieId);
+            // res.render('details',{
+            //     errorMessage: 'Rated successfully! Thank you!',
+            //     messageClass: 'alert-success'
+            // });
+
+        }else{
+            console.log('You have rated this movie.')
+            res.redirect('/movies/' + movieId);
+            // res.render('details', {
+            //     errorMessage: 'You have rated this movie.',
+            //     messageClass: 'alert-danger'
+            // });
+        };
+
+    }
+});
+
 module.exports = router;

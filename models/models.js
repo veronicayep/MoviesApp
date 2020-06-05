@@ -18,6 +18,39 @@ module.exports.Movies = {
             });
         });
     },
+
+    canRate: (movieId, userId) => {
+        return new Promise((resolve, reject) => {
+            let input = [movieId, userId];
+            let sql = 'SELECT * FROM ratings WHERE movie_id = ? AND user_id = ?';
+            
+            con.query(sql, input, (err, result) => {
+                if(err) reject (err);
+                // If record exist, user are not allow to rate (resolve false)
+                if(result.length > 0){
+                    resolve(false);     
+                }else{
+                    resolve(true);
+
+                }
+            })
+        });
+    },
+
+    addNewRating: (movieId, userId, rating) => {
+        return new Promise((resolve, reject) =>{
+            let input = [[movieId, userId, rating]];
+            let sql = 'INSERT INTO ratings (movie_id, user_id, rating) VALUES ?';
+            
+            con.query(sql,[input], function (err, result){
+                if(err) reject (err);
+                resolve(result);
+                console.log("1 record inserted into users database");
+            })
+        })
+    },
+
+
 };
 
 module.exports.Users = {
@@ -36,7 +69,7 @@ module.exports.Users = {
     getLoginAuth: async (email, password) => {
         return new Promise((resolve, reject) => {
             let input = [email];
-            let sql = 'SELECT id, password FROM users WHERE email = ?';
+            let sql = 'SELECT id, first_name as firstName, password FROM users WHERE email = ?';
 
             con.query(sql, input, async (queryErr, userData) => {
                 if (queryErr) reject(queryErr);
@@ -51,7 +84,7 @@ module.exports.Users = {
                             reject(compareErr);
                         }
                         if (result === true) {
-                            resolve(result);
+                            resolve(userData);
                         } else {
                             console.log('Passwords do not match');
                             resolve(result);

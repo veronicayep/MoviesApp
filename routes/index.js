@@ -19,6 +19,7 @@ router.get('/', requireAuth, (req, res, next) => {
                 movieIds,
                 genres,
                 loggedIn: req.loggedIn,
+                firstName: req.firstName,
             });
         })
         .catch((error) => {

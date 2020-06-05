@@ -4,6 +4,7 @@ const {
     unsetAuthToken,
 } = require('../controllers/Auth');
 const { Users } = require('../models/models');
+
 var express = require('express');
 var router = express.Router();
 
@@ -23,7 +24,7 @@ router.get('/signup', (req, res) => {
 
 //----------------------------------------Sign Up------------------------------//
 
-router.post('/signup', async (req, res) => {
+ router.post('/signup', async (req, res) => {
     console.log('signing up...');
     const { firstName, surname, email, password, confirmPassword } = req.body;
     console.log(firstName);
@@ -47,7 +48,7 @@ router.post('/signup', async (req, res) => {
                 );
                 // Registration completed, redirect user to login
                 if (successful) {
-                    setAuthToken(successful.insertId).then((result) => {
+                    setAuthToken(successful.insertId,firstName).then((result) => {
                         const accessToken = result;
                         res.cookie('AuthToken', accessToken);
                         res.redirect('/');
@@ -84,6 +85,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
+
     // Check input is not empty
     if (email && password) {
         // Matching email and password with database
@@ -91,7 +93,7 @@ router.post('/login', async (req, res) => {
         // If user exist and password is correct
         if (user) {
             //  Create access token and set it in cookies
-            setAuthToken(user.id).then(function (result) {
+            setAuthToken(user[0].id, user[0].firstName).then(function (result) {
                 const accessToken = result;
                 res.cookie('AuthToken', accessToken);
                 res.redirect('/');

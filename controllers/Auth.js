@@ -2,12 +2,11 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 module.exports = {
-    setAuthToken: (userId) => {
+    setAuthToken: (userId, firstName) => {
         return new Promise(function(resolve, reject) {
             jwt.sign(
-                { userId },
+                { userId, firstName},
                 'secretAccessKey',
-                { expiresIn: '10m' },
                 (err, token) => {
                     if (err) reject(err);
                     resolve(token);
@@ -17,8 +16,9 @@ module.exports = {
     },
 
     requireAuth: (req, res, next) => {
-        const token = req.cookies['AuthToken'];
-
+        const token = req.cookies['AuthToken']||req.body['AuthToken'];
+        console.log('(requireAuth)Token',token)
+        
         if (token === 'undefined') {
             next();
         } else {
@@ -26,7 +26,9 @@ module.exports = {
                 if (err) {
                     next();
                 } else {
-                    req.user = user;
+                    console.log('(requireAuth) user id ', user.userId)
+                    req.user = user.userId;
+                    req.firstName = user.firstName;
                     req.loggedIn = true;
                     next();
                 }
