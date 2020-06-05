@@ -1,11 +1,8 @@
-const {
-    setAuthToken,
-    requireAuth,
-    unsetAuthToken,
-} = require('../controllers/Auth');
+const { setAuthToken, unsetAuthToken } = require('../controllers/Auth');
 const { Users } = require('../models/models');
-var express = require('express');
-var router = express.Router();
+
+const express = require('express');
+const router = express.Router();
 
 router.get('/login', (req, res) => {
     // http://localhost:3000/users/login
@@ -47,11 +44,13 @@ router.post('/signup', async (req, res) => {
                 );
                 // Registration completed, redirect user to login
                 if (successful) {
-                    setAuthToken(successful.insertId).then((result) => {
-                        const accessToken = result;
-                        res.cookie('AuthToken', accessToken);
-                        res.redirect('/');
-                    });
+                    setAuthToken(successful.insertId, firstName).then(
+                        (result) => {
+                            const accessToken = result;
+                            res.cookie('AuthToken', accessToken);
+                            res.redirect('/');
+                        }
+                    );
                 } else {
                     console.log('Failed to store data');
                 }
@@ -84,6 +83,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
+
     // Check input is not empty
     if (email && password) {
         // Matching email and password with database
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
         // If user exist and password is correct
         if (user) {
             //  Create access token and set it in cookies
-            setAuthToken(user.id).then(function (result) {
+            setAuthToken(user[0].id, user[0].firstName).then(function (result) {
                 const accessToken = result;
                 res.cookie('AuthToken', accessToken);
                 res.redirect('/');

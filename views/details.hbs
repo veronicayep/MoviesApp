@@ -6,9 +6,9 @@
             <img class="align-self-center mw-100 shadow" src="{{poster}}" alt="{{title}} poster">
         </div>
         {{#if loggedIn}}
-        <div class="mt-5 my-sm-4">
-            <h5 class="mb-3">Rate movie:</h5>
-            {{#if canRate}}
+        <div class="mt-5 my-sm-5">
+            {{#if canRate.allow}}
+            <h5 class="mb-3">Rate: '{{title}}'</h5>
             <form action="/movies/details/{{id}}" method="post">
                 <div class="form-group">
                     <select class="custom-select" id="user-rating" name="user-rating">
@@ -18,13 +18,18 @@
                         {{/each}}
                     </select>
                 </div>
-
-                <input id="movie-ids" name="movie-ids" type="hidden" value="{{id}}">
                 
-                <button class="btn btn-dark btn-block mb-sm-4" id="get-ratings">Rate movie</button>
+                <button class="btn btn-dark btn-block mb-sm-4" id="get-ratings">Rate Movie</button>
             </form>
             {{else}}
-            <p class="text-center">You have already rated this movie.</p>
+                {{#if errorMessage}}
+                <div class="my-4 text-center">
+                    <p class="alert-danger">{{errorMessage}}</p>
+                </div>
+                {{/if}}
+            <p class="text-center text-info font-weight-bold">
+                <span class="bg-dark d-inline-block px-3 py-2 shadow-sm">You rated this movie {{canRate.rating}}/5.</span>
+            </p>
             {{/if}}
         </div>
         {{/if}}
@@ -33,12 +38,10 @@
     <div class="col px-5 px-sm-3">
         <h5 class="mt-4 mt-md-3">Year:</h5>
         <p>{{year}}</p>
-        <h5>Synopsis:</h5>
+        <h5 class="mt-4">Synopsis:</h5>
         <p>{{synopsis}}</p>
-        <h5>Community Score:</h5>
+        <h5 class="mt-4">Community Score:</h5>
         {{> rating}}
-        {{#unless loggedIn}}
         <input id="movie-ids" name="movie-ids" type="hidden" value="{{id}}">
-        {{/unless}}
     </div>
 </div>

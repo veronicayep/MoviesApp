@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Movies = require('../controllers/Movies');
-const { requireAuth } = require('../controllers/Auth');
+const { getTokenData } = require('../controllers/Auth');
 
 // GET home page.
-router.get('/', requireAuth, (req, res, next) => {
+router.get('/', getTokenData, (req, res, next) => {
     let genres = Movies.getGenres;
     // console.log(genres);
     Movies.getMovies()
@@ -13,17 +13,29 @@ router.get('/', requireAuth, (req, res, next) => {
             movies.forEach((movie) => {
                 movieIds.push(movie.id);
             });
+
+            // let loggedIn, firstName;
+
+            // if (req.user) {
+            //     loggedIn = req.user.loggedIn;
+            //     firstName = req.user.firstName;
+            // } else {
+            //     loggedIn = false;
+            //     firstName = undefined;
+            // }
+
             res.render('index', {
                 title: 'Movies',
                 movies,
                 movieIds,
                 genres,
-                loggedIn: req.loggedIn,
+                loggedIn: req.user.loggedIn,
+                firstName: req.user.firstName,
             });
         })
         .catch((error) => {
-            console.log(error.response);
-            res.json(error.response);
+            console.log('getMovies catch error', error);
+            next(error);
         });
 });
 

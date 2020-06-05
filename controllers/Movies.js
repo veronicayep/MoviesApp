@@ -41,7 +41,7 @@ module.exports = {
         'Western',
     ],
 
-    getMovieDetails: (movieId) => {
+    getMovieDetails: (movieId, next) => {
         let url = 'https://yts.mx/api/v2/movie_details.json?movie_id=' + movieId;
         console.log('url is', url);
         let details = axios.get(url)
@@ -52,6 +52,7 @@ module.exports = {
             }).catch((error) => {
                 // handle error
                 console.log(error);
+                next(error);
             });
         return details;
     },

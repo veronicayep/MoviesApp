@@ -10,11 +10,59 @@ module.exports.Movies = {
         return new Promise((resolve, reject) => {
             let inputArray = [movieIds];
             let sql =
-                'SELECT movie_id as movieId, AVG(rating) as avgRating, COUNT(rating) as votes FROM ratings WHERE movie_id IN (?) GROUP BY movieId';
+                'SELECT movie_id as movieId, ROUND(AVG(rating), 1) as avgRating, COUNT(rating) as votes FROM ratings WHERE movie_id IN (?) GROUP BY movieId';
 
             con.query(sql, inputArray, (err, result) => {
                 if (err) reject(err);
                 resolve(result);
+            });
+        });
+    },
+
+    canRate: (movieId, userId) => {
+        return new Promise((resolve, reject) => {
+            let input = [movieId, userId];
+            console.log('result movieId', movieId);
+            console.log('result userId', userId);
+
+            let sql =
+                'SELECT movie_id as movieId, rating FROM ratings WHERE movie_id = ? AND user_id = ?';
+
+            con.query(sql, input, (err, result) => {
+                if (err) reject(err);
+                console.log(`${sql} ${input}`);
+
+                console.log('result', result);
+                let data = {};
+                // If record exists, user is not allowed to rate again
+                // return false and existing rating
+                if (result.length > 0) {
+                    data = {
+                        allow: false,
+                        rating: result[0].rating,
+                    };
+                } else {
+                    data = {
+                        allow: true,
+                        rating: undefined,
+                    }
+                }
+
+                resolve(data);
+            });
+        });
+    },
+
+    addNewRating: (movieId, userId, rating) => {
+        return new Promise((resolve, reject) => {
+            let input = [[movieId, userId, rating]];
+            let sql =
+                'INSERT INTO ratings (movie_id, user_id, rating) VALUES ?';
+
+            con.query(sql, [input], function (err, result) {
+                if (err) reject(err);
+                resolve(result);
+                console.log('1 record inserted into users database');
             });
         });
     },
@@ -36,13 +84,14 @@ module.exports.Users = {
     getLoginAuth: async (email, password) => {
         return new Promise((resolve, reject) => {
             let input = [email];
-            let sql = 'SELECT id, password FROM users WHERE email = ?';
+            let sql =
+                'SELECT id, first_name as firstName, password FROM users WHERE email = ?';
 
             con.query(sql, input, async (queryErr, userData) => {
                 if (queryErr) reject(queryErr);
 
-                console.log('userData is',  userData);
-                
+                console.log('userData is', userData);
+
                 if (userData.length > 0) {
                     let retrievedPassword = userData[0].password;
                     bcrypt.compare(password, retrievedPassword, function(compareErr, result) {
@@ -51,7 +100,7 @@ module.exports.Users = {
                             reject(compareErr);
                         }
                         if (result === true) {
-                            resolve(result);
+                            resolve(userData);
                         } else {
                             console.log('Passwords do not match');
                             resolve(result);

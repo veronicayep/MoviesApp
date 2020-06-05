@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 module.exports = {
-    setAuthToken: (userId) => {
-        return new Promise(function(resolve, reject) {
+    setAuthToken: (userId, firstName) => {
+        return new Promise(function (resolve, reject) {
             jwt.sign(
-                { userId },
+                { userId, firstName },
                 'secretAccessKey',
                 // { expiresIn: '10m' },
                 (err, token) => {
@@ -16,18 +16,27 @@ module.exports = {
         });
     },
 
-    requireAuth: (req, res, next) => {
-        const token = req.cookies['AuthToken'];
+    getTokenData: (req, res, next) => {
+        const token = req.cookies['AuthToken'] || req.body['AuthToken'];
+        console.log('(getTokenData) Token', token);
 
-        if (token === 'undefined') {
+        if (token === undefined) {
+            req.user = {
+                userId: undefined,
+                firstName: undefined,
+                loggedIn: false,
+            };
+            console.log('(getTokenData) is undefined. req.user set to', req.user);
             next();
         } else {
             jwt.verify(token, 'secretAccessKey', (err, user) => {
                 if (err) {
-                    next();
+                    console.log('(getTokenData) jwt.verify err', err);
+                    next(err);
                 } else {
+                    user.loggedIn = true;
+                    console.log('(getTokenData) user', user);
                     req.user = user;
-                    req.loggedIn = true;
                     next();
                 }
             });

@@ -92,7 +92,7 @@ $(document).ready(() => {
                         votesWord = 'vote';
                     }
                     $(`#votes-${movie.movieId}`).text(`Received ${movie.votes} ${votesWord}`);
-                    $(`#rating-${movie.movieId}`).toggleClass('bg-warning bg-success text-white');
+                    $(`#rating-${movie.movieId}`).toggleClass('bg-warning bg-success text-white font-weight-bold');
                     console.log(movie);
                 });
             }
