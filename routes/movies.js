@@ -21,7 +21,7 @@ router.post('/ratings', (req, res) => {
 router.get('/:id', getTokenData, async (req, res, next) => {
     let movieId = req.params.id;
     console.log('movie id is', movieId);
-    
+
     let canRate;
     if (req.user.userId) {
         console.log('req.user.userId true', req.user.userId);
@@ -35,7 +35,7 @@ router.get('/:id', getTokenData, async (req, res, next) => {
                 next(err);
             });
     }
-    
+
     Movies.getMovieDetails(movieId, next)
         .then((movieDetails) => {
             console.log('canRate', canRate);
@@ -80,16 +80,20 @@ router.post('/details/:movieId', getTokenData, async (req, res) => {
             console.log('You can rate this movie');
             await Model.addNewRating(movieId, userId, rating);
             res.redirect('/movies/' + movieId);
-            // res.render('details',{
-            //     errorMessage: 'Rated successfully! Thank you!',
-            //     messageClass: 'alert-success'
+            // res.render('details', {
+            //     message: {
+            //         message: 'Rated successfully! Thank you!',
+            //         class: 'alert-success',
+            //     },
             // });
         } else {
-            console.log('You have rated this movie.');
+            console.log('You have already rated this movie.');
             res.redirect('/movies/' + movieId);
             // res.render('details', {
-            //     errorMessage: 'You have rated this movie.',
-            //     messageClass: 'alert-danger'
+            //     message: {
+            //         message: 'You have rated this movie.',
+            //         class: 'alert-danger',
+            //     },
             // });
         }
     }

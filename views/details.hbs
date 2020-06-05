@@ -1,6 +1,6 @@
-<h1 class="mb-5">{{title}}</h1>
+{{> title}}
 
-<div class="row mb-5">
+<div class="row my-5">
     <div class="col-12 col-sm-6 col-md-4 px-5 px-sm-3 mb-5 mr-md-2">
         <div class="px-2 px-sm-0">
             <img class="align-self-center mw-100 shadow" src="{{poster}}" alt="{{title}} poster">
@@ -19,16 +19,11 @@
                     </select>
                 </div>
                 
-                <button class="btn btn-dark btn-block mb-sm-4" id="get-ratings">Rate Movie</button>
+                <button class="btn btn-dark btn-block mb-sm-4" id="get-ratings">Rate</button>
             </form>
             {{else}}
-                {{#if errorMessage}}
-                <div class="my-4 text-center">
-                    <p class="alert-danger">{{errorMessage}}</p>
-                </div>
-                {{/if}}
-            <p class="text-center text-info font-weight-bold">
-                <span class="bg-dark d-inline-block px-3 py-2 shadow-sm">You rated this movie {{canRate.rating}}/5.</span>
+            <p class="text-center mb-0 font-weight-bold">
+                <span class="alert alert-info d-inline-block mb-0 px-3 py-2 shadow-sm rounded">You rated this movie {{canRate.rating}}/5.</span>
             </p>
             {{/if}}
         </div>

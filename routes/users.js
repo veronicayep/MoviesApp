@@ -57,23 +57,29 @@ router.post('/signup', async (req, res) => {
             } else {
                 res.render('signup', {
                     title: 'Sign up',
-                    errorMessage: 'User already registered.',
                     firstName,
                     surname,
                     email,
                     password,
                     confirmPassword,
+                    message: {
+                        message: 'User already registered.',
+                        class: 'alert-danger',
+                    }
                 });
             }
         } else {
             res.render('signup', {
                 title: 'Sign up',
-                errorMessage: 'Passwords do not match.',
                 firstName,
                 surname,
                 email,
                 password,
                 confirmPassword,
+                message: {
+                    message: 'Passwords do not match.',
+                    class: 'alert-danger',
+                }
             });
         }
     }
@@ -101,7 +107,10 @@ router.post('/login', async (req, res) => {
             console.log('User not found or password did not match.');
             res.render('login', {
                 title: 'Login',
-                errorMessage: 'Email or password incorrect. Please try again.',
+                message: {
+                    message: 'Email or password incorrect. Please try again.',
+                    class: 'alert-danger'
+                },
                 email,
                 password,
             });
