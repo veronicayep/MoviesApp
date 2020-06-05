@@ -1,0 +1,18 @@
+<h1 class="mb-5">{{title}}</h1>
+
+<div class="row my-5">
+    <div class="col-12 col-sm-6 col-md-4 px-5 px-sm-3 mr-md-2">
+        <div class="px-2 px-sm-0">
+            <img class="align-self-center mw-100 shadow" src="{{poster}}" alt="{{title}} poster">
+        </div>
+    </div>
+
+    <div class="col px-5 p-sm-3 my-4 my-sm-0 py-4 py-md-3">
+        <h5>Year:</h5>
+        <p>{{year}}</p>
+        <h5>Synopsis:</h5>
+        <p>{{synopsis}}</p>
+        <input id="movie-ids" name="movie-ids" type="hidden" value="{{id}}">
+        {{> rating}}
+    </div>
+</div>

@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const config = require('./config');
-const { setAuthToken, getHashedPassword } = require('../controllers/Auth');
+const { getHashedPassword } = require('../controllers/Auth');
 const con = mysql.createConnection(config);
 
 module.exports.Movies = {

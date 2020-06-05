@@ -40,4 +40,19 @@ module.exports = {
         'War',
         'Western',
     ],
+
+    getMovieDetails: (movieId) => {
+        let url = 'https://yts.mx/api/v2/movie_details.json?movie_id=' + movieId;
+        console.log('url is', url);
+        let details = axios.get(url)
+            .then((response) => {
+                // handle success
+                let data = response.data.data.movie;
+                return data;
+            }).catch((error) => {
+                // handle error
+                console.log(error);
+            });
+        return details;
+    },
 };

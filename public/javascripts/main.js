@@ -1,12 +1,84 @@
 $(document).ready(() => {
     let pathname = window.location.pathname;
     if (pathname === '/') {
+        let movieIds = getHiddenMovieIds();
+        displayRatings(movieIds);
+
+        $('#search').on('input', function() {
+            $(this).addClass('list-group-item-dark');
+            let find = $(this).val().trim();
+            let genre = $('#genre').val();
+            if (find !== '') {
+                let url = 'https://yts.mx/api/v2/list_movies.json?query_term=' + find;
+                if (genre !== null) {
+                    url += '&genre=' + genre;
+                }
+                ajaxSearch(url);
+            } else {
+                $('.remove').remove();
+                $(this).removeClass('list-group-item-dark');
+            }
+        });
+
+        $('#genre').on('change', function() {
+            let genre = $(this).val();
+            let find = $('#search').val().trim();
+            if (find !== '') {
+                $('#search').addClass('list-group-item-dark');
+                let url = 'https://yts.mx/api/v2/list_movies.json?query_term=' + find + '&genre=' + genre;
+                ajaxSearch(url);
+            }
+        });
+
+        function ajaxSearch(url) {
+            console.log(url);
+            $.ajax({
+                url,
+                type: 'GET',
+                success: (movies) => {
+                    if (movies.status === 'ok') {
+                        $('.remove').remove();
+                        if (movies.data.movie_count > 0) {
+                            $.each(movies.data.movies, function(key, movie) {
+                                $('#found-movies').append(
+                                    '<a class="list-group-item list-group-item-action remove" href="/movies/' + 
+                                        movie.id + 
+                                        '">' + 
+                                        movie.title + 
+                                        '</a>'
+                                );
+                            });
+                        }
+                        // console.log(movies);
+                    }
+                }
+            });
+        }
+    } else {
+        let pathnameParts = pathname.split('/');
+        // console.log(pathnameParts);
+        if (pathnameParts[1] === 'movies' && !isNaN(pathnameParts[2])){
+            let movieId = getHiddenMovieIds();
+            displayRatings(movieId);
+        }
+    }
+
+    function getHiddenMovieIds() {
         let movieIds = $('#movie-ids').val();
-        movieIds = movieIds.split(',');
+        return movieIds = movieIds.split(',');
+    }
+
+    function displayRatings(movieIds) {
+        // console.log('displayRatings called');
         // console.log('movieIds are', movieIds);
-        // console.log('movieIds typeof', typeof movieIds);
+
+        let host = 'http://' + window.location.hostname;
+        if (window.location.port) {
+            host += ':' + window.location.port;
+        }
+
         $.ajax({
-            url: 'movies/ratings',
+            url: host + '/movies/ratings',
             type: 'POST',
             data: {
                 movieIds
@@ -25,57 +97,5 @@ $(document).ready(() => {
                 });
             }
         });
-
-        $('#search').on('input', function() {
-            $(this).addClass('list-group-item-dark');
-            let find = $(this).val().trim();
-            let genre = $('#genre').val();
-            if (find !== '') {
-                let url = 'https://yts.mx/api/v2/list_movies.json?query_term=' + find;
-                if (genre !== null) {
-                    url += '&genre=' + genre;
-                }
-                console.log(url);
-                ajaxSearch(url);
-            } else {
-                $('.remove').remove();
-                $(this).removeClass('list-group-item-dark');
-            }
-        });
-
-        $('#genre').on('change', function() {
-            let genre = $(this).val();
-            let find = $('#search').val().trim();
-            if (find !== '') {
-                $('#search').addClass('list-group-item-dark');
-                let url = 'https://yts.mx/api/v2/list_movies.json?query_term=' + find + '&genre=' + genre;
-                console.log(url);
-                ajaxSearch(url);
-            }
-        });
-
-        function ajaxSearch(url) {
-            $.ajax({
-                url,
-                type: 'GET',
-                success: (movies) => {
-                    if (movies.status === 'ok') {
-                        $('.remove').remove();
-                        if (movies.data.movie_count > 0) {
-                            $.each(movies.data.movies, function(key, movie) {
-                                $('#found-movies').append(
-                                    '<a class="list-group-item list-group-item-action remove" href="/' + 
-                                    movie.id + 
-                                    '">' + 
-                                    movie.title + 
-                                    '</a>'
-                                );
-                            });
-                        }
-                        // console.log(movies);
-                    }
-                }
-            });
-        }
     }
 });

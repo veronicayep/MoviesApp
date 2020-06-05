@@ -10,8 +10,8 @@ router.get('/', requireAuth, (req, res, next) => {
     Movies.getMovies()
         .then((movies) => {
             let movieIds = [];
-            movies.forEach((element) => {
-                movieIds.push(element.id);
+            movies.forEach((movie) => {
+                movieIds.push(movie.id);
             });
             res.render('index', {
                 title: 'Movies',
@@ -21,9 +21,9 @@ router.get('/', requireAuth, (req, res, next) => {
                 loggedIn: req.loggedIn,
             });
         })
-        .catch((err) => {
-            console.log(err);
-            res.json(err);
+        .catch((error) => {
+            console.log(error.response);
+            res.json(error.response);
         });
 });
 
