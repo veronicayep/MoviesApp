@@ -14,16 +14,6 @@ router.get('/', getTokenData, (req, res, next) => {
                 movieIds.push(movie.id);
             });
 
-            // let loggedIn, firstName;
-
-            // if (req.user) {
-            //     loggedIn = req.user.loggedIn;
-            //     firstName = req.user.firstName;
-            // } else {
-            //     loggedIn = false;
-            //     firstName = undefined;
-            // }
-
             res.render('index', {
                 title: 'Movies',
                 movies,

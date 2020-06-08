@@ -1,13 +1,11 @@
-{{> title}}
-
 <div class="row my-5">
     <div class="col-12 col-sm-6 col-md-4 px-5 px-sm-3 mb-5 mr-md-2">
         <div class="px-2 px-sm-0">
             <img class="align-self-center mw-100 shadow" src="{{poster}}" alt="{{title}} poster">
         </div>
         {{#if loggedIn}}
-        <div class="mt-5 my-sm-5">
             {{#if canRate.allow}}
+            <div class="mt-5 my-sm-5">
             <h5 class="mb-3">Rate: '{{title}}'</h5>
             <form action="/movies/details/{{id}}" method="post">
                 <div class="form-group">
@@ -21,22 +19,25 @@
                 
                 <button class="btn btn-dark btn-block mb-sm-4" id="get-ratings">Rate</button>
             </form>
-            {{else}}
-            <p class="text-center mb-0 font-weight-bold">
-                <span class="alert alert-info d-inline-block mb-0 px-3 py-2 shadow-sm rounded">You rated this movie {{canRate.rating}}/5.</span>
-            </p>
+            </div>
             {{/if}}
-        </div>
         {{/if}}
     </div>
 
+
     <div class="col px-5 px-sm-3">
-        <h5 class="mt-4 mt-md-3">Year:</h5>
-        <p>{{year}}</p>
+        {{> title}}
+        <h3 class="">{{year}}</h3>
+        {{!-- <p>{{year}}</p> --}}
         <h5 class="mt-4">Synopsis:</h5>
         <p>{{synopsis}}</p>
         <h5 class="mt-4">Community Score:</h5>
         {{> rating}}
+        {{#if loggedIn}}
+            {{#unless canRate.allow}}
+            <div class="alert alert-info d-inline-block my-2 mr-2 px-3 py-2 shadow-sm rounded font-weight-bold">You rated this movie {{canRate.rating}}/5.</div>
+            {{/unless}}
+        {{/if}}
         <input id="movie-ids" name="movie-ids" type="hidden" value="{{id}}">
     </div>
 </div>

@@ -5,8 +5,10 @@
     <input id="movie-ids" name="movie-ids" type="hidden" value="{{movieIds}}">
 {{!-- </form> --}}
 
-<div class="mb-3">
-    <select class="custom-select" id="genre" name="genre">
+<div class="form-inline flex-column-reverse flex-sm-row mb-3">
+    <input class="form-control flex-grow-1 mr-sm-1" id="search" name="search" type="search"
+        placeholder="Search" autocomplete="off" aria-label="Search movies">
+    <select class="custom-select mb-2 mb-sm-0" id="genre" name="genre">
         <option selected="selected" disabled="disabled">Select Genre</option>
         <option value="all">All</option>
         {{#each genres}}
@@ -15,12 +17,10 @@
     </select>
 </div>
 
-<div class="list-group mb-4" id="found-movies">
-    <input class="list-group-item" id="search" name="search" type="search"
-        placeholder="Search" autocomplete="off" aria-label="Search movies">
+<div class="list-group mb-5 d-none" id="found-movies">
 </div>
 
-<div class="row">
+<div class="row my-5">
 {{#each movies}}
     {{> movie}}
 {{/each}}

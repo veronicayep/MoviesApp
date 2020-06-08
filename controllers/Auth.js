@@ -3,9 +3,11 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
     setAuthToken: (userId, firstName) => {
+        firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+        loggedIn = true;
         return new Promise(function (resolve, reject) {
             jwt.sign(
-                { userId, firstName },
+                { userId, firstName, loggedIn },
                 'secretAccessKey',
                 // { expiresIn: '10m' },
                 (err, token) => {
@@ -34,7 +36,6 @@ module.exports = {
                     console.log('(getTokenData) jwt.verify err', err);
                     next(err);
                 } else {
-                    user.loggedIn = true;
                     console.log('(getTokenData) user', user);
                     req.user = user;
                     next();

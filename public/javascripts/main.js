@@ -39,12 +39,13 @@ $(document).ready(() => {
                     if (movies.status === 'ok') {
                         $('.remove').remove();
                         if (movies.data.movie_count > 0) {
+                            $('#found-movies').removeClass('d-none');
                             $.each(movies.data.movies, function(key, movie) {
                                 $('#found-movies').append(
                                     '<a class="list-group-item list-group-item-action remove" href="/movies/' + 
                                         movie.id + 
                                         '">' + 
-                                        movie.title + 
+                                        movie.title_long + 
                                         '</a>'
                                 );
                             });
@@ -91,8 +92,9 @@ $(document).ready(() => {
                     if (movie.votes === 1) {
                         votesWord = 'vote';
                     }
-                    $(`#votes-${movie.movieId}`).text(`Received ${movie.votes} ${votesWord}`);
-                    $(`#rating-${movie.movieId}`).toggleClass('bg-warning bg-success text-white font-weight-bold');
+                    $(`#votes-${movie.movieId}`).text(`${movie.votes} ${votesWord}`);
+                    $(`#votes-${movie.movieId}`).toggleClass('d-none d-inline-block');
+                    $(`#rating-${movie.movieId}`).toggleClass('alert-dark alert-success font-weight-bold');
                     console.log(movie);
                 });
             }
