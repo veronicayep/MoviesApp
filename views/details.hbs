@@ -9,7 +9,7 @@
             <h5 class="mb-3">Rate: '{{title}}'</h5>
             <form action="/movies/details/{{id}}" method="post">
                 <div class="form-group">
-                    <select class="custom-select" id="user-rating" name="user-rating">
+                    <select class="custom-select" id="user-rating" name="user-rating" required="required">
                         <option selected="selected" disabled="disabled">Select a rating</option>
                         {{#each ratingOptions}}
                             <option value="{{this}}">{{this}}</option>

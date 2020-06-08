@@ -26,8 +26,8 @@ router.get('/:id', getTokenData, async (req, res, next) => {
     if (req.user.userId) {
         console.log('req.user.userId true', req.user.userId);
         canRate = Model.canRate(movieId, req.user.userId)
-            .then((allow) => {
-                canRate = allow;
+            .then((result) => {
+                canRate = result;
                 console.log('canRate', canRate);
             })
             .catch((err) => {
@@ -53,49 +53,55 @@ router.get('/:id', getTokenData, async (req, res, next) => {
             // res.json(movieDetails);
         })
         .catch((err) => {
-            console.log('Error in getRatings model function', err);
+            console.log('Error in Movies.getMovieDetails function', err);
             next(err);
         });
 });
 
+// Rate a movie
 router.post('/details/:movieId', getTokenData, async (req, res) => {
     const { movieId } = req.params;
     const { userId } = req.user;
     const rating = req.body['user-rating'];
+    console.log('(details) rating:', rating);
 
-    console.log('(details) Movie ID:', movieId);
-    console.log('(details) User ID: ', userId);
-
-    // Verify user loggin
-    if (userId === undefined) {
-        console.log(' User ID is undefined, please log in to rate');
-        res.redirect('/movies/' + movieId);
-    } else {
-        // Check if user have rated the movie
-        const canRate = await Model.canRate(movieId, userId);
-        console.log(canRate);
-
-        if (canRate.allow === true) {
-            // User haven't rate the movie
-            console.log('You can rate this movie');
-            await Model.addNewRating(movieId, userId, rating);
+    if (rating !== undefined) {
+        console.log('(details) Movie ID:', movieId);
+        console.log('(details) User ID:', userId);
+    
+        // Verify user loggin
+        if (userId === undefined) {
+            console.log(' User ID is undefined, please log in to rate');
             res.redirect('/movies/' + movieId);
-            // res.render('details', {
-            //     message: {
-            //         message: 'Rated successfully! Thank you!',
-            //         class: 'alert-success',
-            //     },
-            // });
         } else {
-            console.log('You have already rated this movie.');
-            res.redirect('/movies/' + movieId);
-            // res.render('details', {
-            //     message: {
-            //         message: 'You have rated this movie.',
-            //         class: 'alert-danger',
-            //     },
-            // });
+            // Check if user have rated the movie
+            const canRate = await Model.canRate(movieId, userId);
+            console.log(canRate);
+    
+            if (canRate.allow === true) {
+                // User hasn't rated the movie already
+                console.log('You can rate this movie');
+                await Model.addNewRating(movieId, userId, rating);
+                res.redirect('/movies/' + movieId);
+                // res.render('details', {
+                //     message: {
+                //         message: 'Rated successfully! Thank you!',
+                //         class: 'alert-success',
+                //     },
+                // });
+            } else {
+                console.log('You have already rated this movie.');
+                res.redirect('/movies/' + movieId);
+                // res.render('details', {
+                //     message: {
+                //         message: 'You have rated this movie.',
+                //         class: 'alert-danger',
+                //     },
+                // });
+            }
         }
+    } else {
+        res.redirect('/movies/' + movieId);
     }
 });
 
