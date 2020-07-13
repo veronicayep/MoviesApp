@@ -1,6 +1,4 @@
-# project5-api
-Film rating application
-
+#MoviesApp
 Team member: Tien, Mark
 
 After the success of your previous missions, you decide to offer your services as a freelancer on a dedicated platform. Soon, Pathé Gaumont cinemas call on you to build a community of moviegoers. They ask you to develop a movie rating platform, in collaboration with another freelancer. 
